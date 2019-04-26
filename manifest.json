@@ -1,41 +1,16 @@
 {
   "manifest_version": 2,
-  "name": "My_First_Addon",
-  "description": "This is my first addon.",
-  "version": "0.0.1",
+  "name": "NITK Toastmasters Meeting",
+  "description": "An add-on to view the next meeting details of the NITK Toastmasters Club",
+  "version": "0.1.0",
   "icons": {
     "64": "icons/icon.png"
   },
-  "background": {
-    "scripts": [
-      "background_script.js"
-    ]
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content_script.js"
-      ]
-    }
-  ],
   "browser_action": {
     "default_icon": {
       "64": "icons/icon.png"
     },
     "default_popup": "browserAction/index.html",
-    "default_title": "My_First_Addon"
-  },
-  "page_action": {
-    "default_icon": {
-      "64": "icons/icon.png"
-    },
-    "default_popup": "pageAction/index.html",
-    "default_title": "My_First_Addon"
-  },
-  "options_ui": {
-    "page": "options/index.html"
+    "default_title": "NITK Toastmasters Meeting"
   }
 }

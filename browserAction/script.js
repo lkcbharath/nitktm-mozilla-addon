@@ -1,67 +1,63 @@
-if (!firebase.apps.length) {
-    firebase.initializeApp(config)
-}
+
+// Initialize Firebase app object
+if (!firebase.apps.length)
+    firebase.initializeApp(config);
 else
     firebase.app();
 
-alert("test");
+// To check for Database updates
+var onUpdate = 0;
 
-items = [];
-var onCreate = 0;
+// DOM object to access <ol> element
+var meeting_list = document.getElementById("meeting-list");
 
+// Firebase database connection object
 var ref = firebase.database().ref().child("Roles");
 
-var p1 = document.getElementById("meeting-list");
-
+// Listening for changes to database
 ref.on("value", function (snapshot) {
 
-    if (onCreate == 1) {
-        items.length = 0;
+    // If the meeting detail is updated
+    if (onUpdate == 1) {
         alert("Next Meeting Details updated!");
-        p1.innerHTML = "";
+        meeting_list.innerHTML = "";
     }
 
-    onCreate = 1;
+    // For checking updates
+    onUpdate = 1;
 
+    // Parse JSON values
     var values = snapshot.val();
     var sorted_values = [];
-
     for (var key in values) {
         if (values.hasOwnProperty(key)) {
             sorted_values.push([key, values[key]]);
         }
     }
-
     sorted_values.sort(function (a, b) {
         return parseFloat(a[1].order) - parseFloat(b[1].order);
     });
 
+    // Insert values into meeting_list
     for (var x in sorted_values) {
         var role_title = sorted_values[x][0];
-        var role_name = "Testing";
-        var role_description = "Default description"
+        var role_name = "Default";
 
         if (sorted_values[x][1]["Name"] != undefined)
             role_name = sorted_values[x][1]["Name"];
         else
             role_name = sorted_values[x][1]["Speaker"] + " : " + sorted_values[x][1]["Project"] + " : " + sorted_values[x][1]["Evaluator"];
 
-        if (sorted_values[x][1]["description"] != undefined)
-            role_description = sorted_values[x][1]["description"];
+        // Create a DOM object of type <li>
+        var li = document.createElement("li");
+        li.className = "list-group-item";
 
-        // alert(role_name + role_title + role_description);
-        // items.push({
-        //     title: role_title,
-        //     note: role_name,
-        //     description: role_description
-        // });
+        // IMPORTANT: sanitize incoming text
+        var role_text = document.createTextNode(role_title + ": " + role_name);
+        li.appendChild(role_text);
 
-        p1.innerHTML = p1.innerHTML + '<li class="list-group-item"><b>' + role_title + ":</b> " + role_name + "</li>";
+        // Add <li> to meeting_list
+        meeting_list.appendChild(li);
 
-        // alert(items);
     }
 });
-
-if (onCreate == 0) {
-    //   some loading thing
-}
